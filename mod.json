@@ -1,0 +1,51 @@
+{
+    "geode": "3.4.0",
+    "gd": {
+        "android": "2.206",
+        "win": "2.206",
+        "mac": "2.206"
+    },
+    "version": "v1.0.0",
+    "id": "hiimjustin000.search_history",
+    "name": "Search History",
+    "developer": "hiimjustin000",
+    "description": "A mod that allows you to view your search history.",
+    "repository": "https://github.com/hiimjustin000/SearchHistory",
+    "dependencies": [
+        {
+            "id": "geode.node-ids",
+            "version": ">=v1.12.0",
+            "importance": "required"
+        }
+    ],
+    "resources": {
+        "sprites": [
+            "resources/*.png"
+        ],
+        "spritesheets": {
+            "HistorySheet": [
+                "resources/HistorySheet/*.png"
+            ]
+        }
+    },
+    "settings": {
+        "12-hour-time": {
+            "name": "12-Hour Time",
+            "description": "Whether or not to use 12-hour time on the time label.",
+            "type": "bool",
+            "default": false
+        },
+        "white-time": {
+            "name": "White Time",
+            "description": "Whether or not to color the time label white.",
+            "type": "bool",
+            "default": false
+        }
+    },
+    "tags": [
+        "enhancement",
+        "interface",
+        "offline",
+        "utility"
+    ]
+}
