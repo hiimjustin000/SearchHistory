@@ -185,7 +185,7 @@ bool SearchHistoryNode::init(SearchHistoryObject const& object, int index, Searc
             addChild(songSprite);
 
             auto songLabel = CCLabelBMFont::create(
-                (object.customSong ? std::to_string(object.songID) : LevelTools::getAudioTitle(object.songID - 1)).c_str(), "bigFont.fnt");
+                (object.customSong ? std::to_string(object.songID) : std::string(LevelTools::getAudioTitle(object.songID - 1).c_str())).c_str(), "bigFont.fnt");
             songLabel->setScale(0.4f);
             songLabel->setAnchorPoint({ 0.0f, 0.5f });
             songLabel->setPosition(120.0f, 15.0f);
@@ -202,7 +202,7 @@ bool SearchHistoryNode::init(SearchHistoryObject const& object, int index, Searc
     }
 
     std::stringstream ss;
-    auto time = object.time;
+    auto time = (time_t)object.time;
     ss << std::put_time(std::localtime(&time), h12 ? "%Y-%m-%d %I:%M:%S %p" : "%Y-%m-%d %H:%M:%S");
     
     auto timeLabel = CCLabelBMFont::create(ss.str().c_str(), "chatFont.fnt");
