@@ -1,7 +1,7 @@
 #include "SearchHistoryPopup.hpp"
 
 #include <Geode/modify/LevelSearchLayer.hpp>
-class $modify(MyLevelSearchLayer, LevelSearchLayer) {
+class $modify(SHLevelSearchLayer, LevelSearchLayer) {
     bool init(int type) {
         if (!LevelSearchLayer::init(type)) return false;
 
