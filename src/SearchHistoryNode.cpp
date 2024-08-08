@@ -74,11 +74,7 @@ bool SearchHistoryNode::init(SearchHistoryObject const& object, int index, Searc
     removeButton->setPosition(queryLabel->getScaledContentSize().width + 120.0f, queryLabel->getPositionY());
     buttonMenu->addChild(removeButton);
 
-    auto searchButton = CCMenuItemExt::createSpriteExtraWithFrameName("GJ_undoBtn_001.png", 0.6f, [this](auto) {
-        createQuickPopup("Search", "Are you sure you want to search with this query?", "No", "Yes", [this](auto, bool btn2) {
-            if (btn2) m_searchCallback(m_object);
-        });
-    });
+    auto searchButton = CCMenuItemExt::createSpriteExtraWithFrameName("GJ_undoBtn_001.png", 0.6f, [this](auto) { m_searchCallback(m_object); });
     searchButton->setPosition(queryLabel->getScaledContentSize().width + 150.0f, queryLabel->getPositionY());
     buttonMenu->addChild(searchButton);
 
