@@ -9,6 +9,7 @@ protected:
     TextInput* m_searchInput;
     CCMenuItemSpriteExtra* m_prevButton;
     CCMenuItemSpriteExtra* m_nextButton;
+    CCLabelBMFont* m_countLabel;
     int m_page;
 
     bool setup(SearchHistoryCallback) override;

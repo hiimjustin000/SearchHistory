@@ -19,7 +19,7 @@ bool SearchHistoryNode::init(SearchHistoryObject const& object, int index, Searc
     m_searchCallback = search;
     m_removeCallback = remove;
     m_index = index;
-    
+
     auto background = CCScale9Sprite::create("GJ_square01.png", { 0, 0, 80, 80 });
     background->setContentSize({ 400.0f, 100.0f });
     background->setPosition(200.0f, 50.0f);
@@ -144,7 +144,7 @@ bool SearchHistoryNode::init(SearchHistoryObject const& object, int index, Searc
             demonFilterSprite->setScale(0.5f);
             difficultiesNode->addChild(demonFilterSprite);
         }
-        
+
         if (type < 1) for (auto time : object.lengths) {
             auto length = std::string();
             switch (time) {
@@ -204,7 +204,7 @@ bool SearchHistoryNode::init(SearchHistoryObject const& object, int index, Searc
     std::stringstream ss;
     auto time = (time_t)object.time;
     ss << std::put_time(std::localtime(&time), h12 ? "%Y-%m-%d %I:%M:%S %p" : "%Y-%m-%d %H:%M:%S");
-    
+
     auto timeLabel = CCLabelBMFont::create(ss.str().c_str(), "chatFont.fnt");
     timeLabel->setColor(white ? ccColor3B { 255, 255, 255 } : ccColor3B { 51, 51, 51 });
     timeLabel->setOpacity(white ? 200 : 152);

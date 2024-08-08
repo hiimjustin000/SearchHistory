@@ -57,6 +57,12 @@ bool SearchHistoryPopup::setup(SearchHistoryCallback callback) {
     clearButton->setPosition(420.0f, 270.0f);
     m_buttonMenu->addChild(clearButton);
 
+    m_countLabel = CCLabelBMFont::create("", "goldFont.fnt");
+    m_countLabel->setAnchorPoint({ 1.0f, 0.0f });
+    m_countLabel->setScale(0.5f);
+    m_countLabel->setPosition(435.0f, 7.0f);
+    m_mainLayer->addChild(m_countLabel);
+
     m_searchInput = TextInput::create(400.0f, "Search History...");
     m_searchInput->setCommonFilter(CommonFilter::Any);
     m_searchInput->setTextAlign(TextInputAlign::Left);
@@ -96,6 +102,8 @@ void SearchHistoryPopup::page(int p) {
 
     m_scrollLayer->m_contentLayer->updateLayout();
     m_scrollLayer->scrollToTop();
+
+    m_countLabel->setString(fmt::format("{} to {} of {}", count > 0 ? p * 5 + 1 : 0, std::min((p + 1) * 5, (int)count), count).c_str());
 
     m_page = p;
 }
