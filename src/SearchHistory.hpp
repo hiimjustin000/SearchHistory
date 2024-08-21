@@ -36,15 +36,15 @@ public:
 template<>
 struct matjson::Serialize<std::vector<SearchHistoryObject>> {
     static std::vector<SearchHistoryObject> from_json(matjson::Value const& value) {
-        auto vec = std::vector<SearchHistoryObject>();
+        std::vector<SearchHistoryObject> vec;
 
         for (auto const& elem : value.as_array()) {
-            auto difficulties = std::vector<int>();
+            std::vector<int> difficulties;
             for (auto const& e : elem["difficulties"].as_array()) {
                 difficulties.push_back(e.as_int());
             }
 
-            auto lengths = std::vector<int>();
+            std::vector<int> lengths;
             for (auto const& e : elem["lengths"].as_array()) {
                 lengths.push_back(e.as_int());
             }
@@ -77,15 +77,15 @@ struct matjson::Serialize<std::vector<SearchHistoryObject>> {
     }
 
     static matjson::Value to_json(std::vector<SearchHistoryObject> const& vec) {
-        auto arr = matjson::Array();
+        matjson::Array arr;
 
         for (auto const& obj : vec) {
-            auto difficulties = matjson::Array();
+            matjson::Array difficulties;
             for (int const& e : obj.difficulties) {
                 difficulties.push_back(e);
             }
 
-            auto lengths = matjson::Array();
+            matjson::Array lengths;
             for (int const& e : obj.lengths) {
                 lengths.push_back(e);
             }

@@ -4,13 +4,13 @@ void SearchHistory::add(GJSearchObject* search, time_t time, int type) {
     auto history = Mod::get()->getSavedValue<std::vector<SearchHistoryObject>>("search-history");
 
     auto difficultyStrings = search->m_difficulty != "-" ? string::split(search->m_difficulty, ",") : std::vector<std::string>();
-    auto difficulties = std::vector<int>();
+    std::vector<int> difficulties;
     for (auto const& str : difficultyStrings) {
         difficulties.push_back(std::stoi(str));
     }
 
     auto lengthStrings = search->m_length != "-" ? string::split(search->m_length, ",") : std::vector<std::string>();
-    auto lengths = std::vector<int>();
+    std::vector<int> lengths;
     for (auto const& str : lengthStrings) {
         lengths.push_back(std::stoi(str));
     }
@@ -42,7 +42,7 @@ void SearchHistory::add(GJSearchObject* search, time_t time, int type) {
 }
 
 void SearchHistory::clear() {
-    Mod::get()->setSavedValue("search-history", std::vector<SearchHistoryObject>());
+    Mod::get()->setSavedValue<std::vector<SearchHistoryObject>>("search-history", {});
 }
 
 std::vector<SearchHistoryObject> SearchHistory::get() {

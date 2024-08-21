@@ -5,7 +5,7 @@
         "win": "2.206",
         "mac": "2.206"
     },
-    "version": "v1.0.2",
+    "version": "v1.0.3",
     "id": "hiimjustin000.search_history",
     "name": "Search History",
     "developer": "hiimjustin000",
@@ -29,6 +29,12 @@
         }
     },
     "settings": {
+        "incognito-mode": {
+            "name": "Incognito Mode",
+            "description": "Whether or not to hide the search history button and not save any searches.",
+            "type": "bool",
+            "default": false
+        },
         "12-hour-time": {
             "name": "12-Hour Time",
             "description": "Whether or not to use 12-hour time on the time label.",

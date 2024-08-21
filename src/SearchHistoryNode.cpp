@@ -122,7 +122,7 @@ bool SearchHistoryNode::init(SearchHistoryObject const& object, int index, Searc
         addChild(difficultiesNode);
 
         for (auto difficulty : object.difficulties) {
-            auto difficultyFrame = std::string();
+            std::string difficultyFrame;
             switch (difficulty) {
                 case -1: difficultyFrame = "diffIcon_00_btn_001.png"; break;
                 case -2: difficultyFrame = "diffIcon_06_btn_001.png"; break;
@@ -142,7 +142,7 @@ bool SearchHistoryNode::init(SearchHistoryObject const& object, int index, Searc
         }
 
         if (type < 1) for (auto time : object.lengths) {
-            auto length = std::string();
+            auto length = "";
             switch (time) {
                 case 0: length = "Tiny"; break;
                 case 1: length = "Short"; break;
@@ -152,7 +152,7 @@ bool SearchHistoryNode::init(SearchHistoryObject const& object, int index, Searc
                 case 5: length = "Plat."; break;
             }
 
-            auto lengthLabel = CCLabelBMFont::create(length.c_str(), "bigFont.fnt");
+            auto lengthLabel = CCLabelBMFont::create(length, "bigFont.fnt");
             lengthLabel->setScale(0.3f);
             difficultiesNode->addChild(lengthLabel);
         }
@@ -198,8 +198,14 @@ bool SearchHistoryNode::init(SearchHistoryObject const& object, int index, Searc
     }
 
     std::stringstream ss;
-    auto time = (time_t)object.time;
+    time_t time = object.time;
+    #ifdef GEODE_IS_WINDOWS
+    struct tm tm;
+    localtime_s(&tm, &time);
+    ss << std::put_time(&tm, h12 ? "%Y-%m-%d %I:%M:%S %p" : "%Y-%m-%d %H:%M:%S");
+    #else
     ss << std::put_time(std::localtime(&time), h12 ? "%Y-%m-%d %I:%M:%S %p" : "%Y-%m-%d %H:%M:%S");
+    #endif
 
     auto timeLabel = CCLabelBMFont::create(ss.str().c_str(), "chatFont.fnt");
     timeLabel->setColor(white ? ccColor3B { 255, 255, 255 } : ccColor3B { 51, 51, 51 });

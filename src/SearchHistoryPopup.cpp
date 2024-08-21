@@ -78,7 +78,7 @@ bool SearchHistoryPopup::setup(SearchHistoryCallback callback) {
 void SearchHistoryPopup::page(int p) {
     m_scrollLayer->m_contentLayer->removeAllChildren();
 
-    auto history = std::vector<SearchHistoryObject>();
+    std::vector<SearchHistoryObject> history;
     auto query = string::toLower(m_searchInput->getString());
     for (auto const& object : SearchHistory::get()) {
         if (string::toLower(object.query).find(query) != std::string::npos) history.push_back(object);

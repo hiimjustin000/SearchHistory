@@ -4,6 +4,7 @@ A mod that allows you to view your search history.
 ## Features
 - A button in the level search menu that allows you to view your search history
 - A popup that shows your search history, including a filter text box, and entries that can be used to search again
+- Incognito mode, which allows you to search without saving to your search history
 
 ## Credits
 - [Kabslantivity](https://gdbrowser.com/u/17597362) - Initial idea for the mod

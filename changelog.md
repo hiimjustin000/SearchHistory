@@ -1,4 +1,7 @@
 # Search History Changelog
+## v1.0.3 (2024-08-20)
+- Added incognito mode
+
 ## v1.0.2 (2024-08-08)
 - Removed the search confirmation popup
 

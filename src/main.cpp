@@ -5,6 +5,8 @@ class $modify(SHLevelSearchLayer, LevelSearchLayer) {
     bool init(int type) {
         if (!LevelSearchLayer::init(type)) return false;
 
+        if (Mod::get()->getSettingValue<bool>("incognito-mode")) return true;
+
         auto historyButtonSprite = CircleButtonSprite::createWithSprite("SH_historyBtn_001.png"_spr);
         historyButtonSprite->getTopNode()->setScale(1.0f);
         historyButtonSprite->setScale(0.8f);
@@ -64,11 +66,13 @@ class $modify(SHLevelSearchLayer, LevelSearchLayer) {
 
     void onSearch(CCObject* sender) {
         LevelSearchLayer::onSearch(sender);
+        if (Mod::get()->getSettingValue<bool>("incognito-mode")) return;
         SearchHistory::add(getSearchObject(SearchType::Search, m_searchInput->getString()), time(0), m_type);
     }
 
     void onSearchUser(CCObject* sender) {
         LevelSearchLayer::onSearchUser(sender);
+        if (Mod::get()->getSettingValue<bool>("incognito-mode")) return;
         SearchHistory::add(getSearchObject(SearchType::Users, m_searchInput->getString()), time(0), 2);
     }
 };
