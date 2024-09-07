@@ -1,4 +1,8 @@
 # Search History Changelog
+## v1.0.4 (2024-09-07)
+- Removed properties from saved.json that are default values
+- Changed the search history button texture and mod logo
+
 ## v1.0.3 (2024-08-20)
 - Added incognito mode
 

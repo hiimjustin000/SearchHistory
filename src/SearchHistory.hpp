@@ -33,6 +33,8 @@ public:
     static void remove(int);
 };
 
+#define PROPERTY_OR_DEFAULT(obj, prop, isFunc, asFunc, def) (obj.contains(prop) && obj[prop].isFunc() ? obj[prop].asFunc() : def)
+
 template<>
 struct matjson::Serialize<std::vector<SearchHistoryObject>> {
     static std::vector<SearchHistoryObject> from_json(matjson::Value const& value) {
@@ -40,36 +42,40 @@ struct matjson::Serialize<std::vector<SearchHistoryObject>> {
 
         for (auto const& elem : value.as_array()) {
             std::vector<int> difficulties;
-            for (auto const& e : elem["difficulties"].as_array()) {
-                difficulties.push_back(e.as_int());
+            if (elem.contains("difficulties") && elem["difficulties"].is_array()) {
+                for (auto const& e : elem["difficulties"].as_array()) {
+                    difficulties.push_back(e.as_int());
+                }
             }
 
             std::vector<int> lengths;
-            for (auto const& e : elem["lengths"].as_array()) {
-                lengths.push_back(e.as_int());
+            if (elem.contains("lengths") && elem["lengths"].is_array()) {
+                for (auto const& e : elem["lengths"].as_array()) {
+                    lengths.push_back(e.as_int());
+                }
             }
 
             vec.push_back({
-                .time = (int64_t)elem["time"].as_double(),
-                .type = elem["type"].as_int(),
-                .query = elem["query"].as_string(),
+                .time = (int64_t)PROPERTY_OR_DEFAULT(elem, "time", is_number, as_double, 0),
+                .type = PROPERTY_OR_DEFAULT(elem, "type", is_number, as_int, 0),
+                .query = PROPERTY_OR_DEFAULT(elem, "query", is_string, as_string, ""),
                 .difficulties = difficulties,
                 .lengths = lengths,
-                .uncompleted = elem["uncompleted"].as_bool(),
-                .completed = elem["completed"].as_bool(),
-                .featured = elem["featured"].as_bool(),
-                .original = elem["original"].as_bool(),
-                .twoPlayer = elem["two-player"].as_bool(),
-                .coins = elem["coins"].as_bool(),
-                .epic = elem["epic"].as_bool(),
-                .legendary = elem["legendary"].as_bool(),
-                .mythic = elem["mythic"].as_bool(),
-                .song = elem["song"].as_bool(),
-                .customSong = elem["custom-song"].as_bool(),
-                .songID = elem["song-id"].as_int(),
-                .demonFilter = elem["demon-filter"].as_int(),
-                .noStar = elem["no-star"].as_bool(),
-                .star = elem["star"].as_bool()
+                .uncompleted = PROPERTY_OR_DEFAULT(elem, "uncompleted", is_bool, as_bool, false),
+                .completed = PROPERTY_OR_DEFAULT(elem, "completed", is_bool, as_bool, false),
+                .featured = PROPERTY_OR_DEFAULT(elem, "featured", is_bool, as_bool, false),
+                .original = PROPERTY_OR_DEFAULT(elem, "original", is_bool, as_bool, false),
+                .twoPlayer = PROPERTY_OR_DEFAULT(elem, "two-player", is_bool, as_bool, false),
+                .coins = PROPERTY_OR_DEFAULT(elem, "coins", is_bool, as_bool, false),
+                .epic = PROPERTY_OR_DEFAULT(elem, "epic", is_bool, as_bool, false),
+                .legendary = PROPERTY_OR_DEFAULT(elem, "legendary", is_bool, as_bool, false),
+                .mythic = PROPERTY_OR_DEFAULT(elem, "mythic", is_bool, as_bool, false),
+                .song = PROPERTY_OR_DEFAULT(elem, "song", is_bool, as_bool, false),
+                .customSong = PROPERTY_OR_DEFAULT(elem, "custom-song", is_bool, as_bool, false),
+                .songID = PROPERTY_OR_DEFAULT(elem, "song-id", is_number, as_int, 0),
+                .demonFilter = PROPERTY_OR_DEFAULT(elem, "demon-filter", is_number, as_int, 0),
+                .noStar = PROPERTY_OR_DEFAULT(elem, "no-star", is_bool, as_bool, false),
+                .star = PROPERTY_OR_DEFAULT(elem, "star", is_bool, as_bool, false)
             });
         }
 
@@ -90,28 +96,31 @@ struct matjson::Serialize<std::vector<SearchHistoryObject>> {
                 lengths.push_back(e);
             }
 
-            arr.push_back(matjson::Object {
-                { "time", obj.time },
-                { "type", obj.type },
-                { "query", obj.query },
-                { "difficulties", difficulties },
-                { "lengths", lengths },
-                { "uncompleted", obj.uncompleted },
-                { "completed", obj.completed },
-                { "featured", obj.featured },
-                { "original", obj.original },
-                { "two-player", obj.twoPlayer },
-                { "coins", obj.coins },
-                { "epic", obj.epic },
-                { "legendary", obj.legendary },
-                { "mythic", obj.mythic },
-                { "song", obj.song },
-                { "custom-song", obj.customSong },
-                { "song-id", obj.songID },
-                { "demon-filter", obj.demonFilter },
-                { "no-star", obj.noStar },
-                { "star", obj.star }
-            });
+            matjson::Object historyObject;
+            historyObject["time"] = obj.time;
+            historyObject["type"] = obj.type;
+            if (!obj.query.empty()) historyObject["query"] = obj.query;
+            if (!difficulties.empty()) historyObject["difficulties"] = difficulties;
+            if (!lengths.empty()) historyObject["lengths"] = lengths;
+            if (obj.uncompleted) historyObject["uncompleted"] = obj.uncompleted;
+            if (obj.completed) historyObject["completed"] = obj.completed;
+            if (obj.featured) historyObject["featured"] = obj.featured;
+            if (obj.original) historyObject["original"] = obj.original;
+            if (obj.twoPlayer) historyObject["two-player"] = obj.twoPlayer;
+            if (obj.coins) historyObject["coins"] = obj.coins;
+            if (obj.epic) historyObject["epic"] = obj.epic;
+            if (obj.legendary) historyObject["legendary"] = obj.legendary;
+            if (obj.mythic) historyObject["mythic"] = obj.mythic;
+            if (obj.song) {
+                historyObject["song"] = obj.song;
+                if (obj.customSong) historyObject["custom-song"] = obj.customSong;
+                historyObject["song-id"] = obj.songID;
+            }
+            if (obj.demonFilter != 0) historyObject["demon-filter"] = obj.demonFilter;
+            if (obj.noStar) historyObject["no-star"] = obj.noStar;
+            if (obj.star) historyObject["star"] = obj.star;
+
+            arr.push_back(historyObject);
         }
 
         return arr;
