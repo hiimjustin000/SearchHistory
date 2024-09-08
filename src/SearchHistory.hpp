@@ -23,6 +23,28 @@ struct SearchHistoryObject {
     int demonFilter;
     bool noStar;
     bool star;
+
+    bool operator==(SearchHistoryObject const& other) const {
+        return floor(time / 86400.0) == floor(other.time / 86400.0) && 
+            type == other.type &&
+            query == other.query &&
+            difficulties == other.difficulties &&
+            lengths == other.lengths &&
+            uncompleted == other.uncompleted &&
+            completed == other.completed &&
+            featured == other.featured &&
+            original == other.original &&
+            twoPlayer == other.twoPlayer &&
+            coins == other.coins &&
+            epic == other.epic &&
+            legendary == other.legendary &&
+            mythic == other.mythic &&
+            song == other.song &&
+            (!song || (customSong == other.customSong && songID == other.songID)) &&
+            demonFilter == other.demonFilter &&
+            noStar == other.noStar &&
+            star == other.star;
+    }
 };
 
 class SearchHistory {
@@ -55,7 +77,7 @@ struct matjson::Serialize<std::vector<SearchHistoryObject>> {
                 }
             }
 
-            vec.push_back({
+            SearchHistoryObject obj = {
                 .time = (int64_t)PROPERTY_OR_DEFAULT(elem, "time", is_number, as_double, 0),
                 .type = PROPERTY_OR_DEFAULT(elem, "type", is_number, as_int, 0),
                 .query = PROPERTY_OR_DEFAULT(elem, "query", is_string, as_string, ""),
@@ -76,7 +98,11 @@ struct matjson::Serialize<std::vector<SearchHistoryObject>> {
                 .demonFilter = PROPERTY_OR_DEFAULT(elem, "demon-filter", is_number, as_int, 0),
                 .noStar = PROPERTY_OR_DEFAULT(elem, "no-star", is_bool, as_bool, false),
                 .star = PROPERTY_OR_DEFAULT(elem, "star", is_bool, as_bool, false)
-            });
+            };
+
+            if (!std::any_of(vec.begin(), vec.end(), [&obj](SearchHistoryObject const& o) {
+                return obj == o;
+            })) vec.push_back(obj);
         }
 
         return vec;

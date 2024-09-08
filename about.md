@@ -13,5 +13,4 @@ A mod that allows you to view your search history.
 - [hiimjustin000](user:7466002) - Creator of the mod
 
 ## Gallery
-![Search History Popup 1](hiimjustin000.search_history/image1.png?scale=0.625)\
-![Search History Popup 2](hiimjustin000.search_history/image2.png?scale=0.625)
+![Search History Popup](hiimjustin000.search_history/search-history.png?scale=0.625)

@@ -9,8 +9,10 @@ protected:
     SearchCallback m_searchCallback;
     RemoveCallback m_removeCallback;
     int m_index;
-
-    bool init(SearchHistoryObject const&, int, SearchCallback, RemoveCallback, bool, bool);
+    int m_count;
 public:
-    static SearchHistoryNode* create(SearchHistoryObject const&, int, SearchCallback, RemoveCallback, bool, bool);
+    static SearchHistoryNode* create(SearchHistoryObject const&, int, int, SearchCallback, RemoveCallback, bool, bool, bool);
+
+    bool init(SearchHistoryObject const&, int, int, SearchCallback, RemoveCallback, bool, bool, bool);
+    void draw() override;
 };

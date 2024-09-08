@@ -1,4 +1,9 @@
 # Search History Changelog
+## v1.1.0 (2024-09-08)
+- Revamped the search history popup
+- Expanded the number of search history entries per page from 5 to 10
+- Removed duplicate search history entries from the same day
+
 ## v1.0.4 (2024-09-07)
 - Removed properties from saved.json that are default values
 - Changed the search history button texture and mod logo

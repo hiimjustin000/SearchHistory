@@ -13,8 +13,7 @@ A mod that allows you to view your search history.
 - [hiimjustin000](https://gdbrowser.com/u/7466002) - Creator of the mod
 
 ## Gallery
-![Search History Popup 1](./resources/image1.png)
-![Search History Popup 2](./resources/image2.png)
+![Search History Popup ](./resources/search-history.png)
 
 # License
 This mod is licensed under the [MIT License](./LICENSE).

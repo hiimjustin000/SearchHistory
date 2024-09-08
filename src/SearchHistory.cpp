@@ -15,7 +15,7 @@ void SearchHistory::add(GJSearchObject* search, time_t time, int type) {
         lengths.push_back(std::stoi(str));
     }
 
-    history.insert(history.begin(), {
+    SearchHistoryObject obj = {
         .time = time,
         .type = type,
         .query = search->m_searchQuery,
@@ -36,7 +36,15 @@ void SearchHistory::add(GJSearchObject* search, time_t time, int type) {
         .demonFilter = (int)search->m_demonFilter,
         .noStar = search->m_noStarFilter,
         .star = search->m_starFilter
+    };
+
+    auto found = std::find_if(history.begin(), history.end(), [&obj](SearchHistoryObject const& o) {
+        return obj == o;
     });
+
+    if (found != history.end()) history.erase(found);
+
+    history.insert(history.begin(), obj);
 
     Mod::get()->setSavedValue("search-history", history);
 }

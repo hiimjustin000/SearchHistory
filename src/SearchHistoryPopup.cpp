@@ -28,7 +28,7 @@ bool SearchHistoryPopup::setup(SearchHistoryCallback callback) {
             ->setAxisReverse(true)
             ->setAxisAlignment(AxisAlignment::End)
             ->setAutoGrowAxis(195.0f)
-            ->setGap(2.5f)
+            ->setGap(0.0f)
     );
     m_mainLayer->addChild(m_scrollLayer);
 
@@ -86,24 +86,25 @@ void SearchHistoryPopup::page(int p) {
 
     auto count = history.size();
     m_prevButton->setVisible(p > 0);
-    m_nextButton->setVisible(p < (count > 0 ? (count - 1) / 5 : 0));
+    m_nextButton->setVisible(p < (count > 0 ? (count - 1) / 10 : 0));
 
     auto h12 = Mod::get()->getSettingValue<bool>("12-hour-time");
     auto white = Mod::get()->getSettingValue<bool>("white-time");
-    for (int i = p * 5; i < (p + 1) * 5 && i < count; i++) {
-        m_scrollLayer->m_contentLayer->addChild(SearchHistoryNode::create(history[i], i, [this](SearchHistoryObject const& object) {
+    auto dark = Loader::get()->isModLoaded("bitz.darkmode_v4");
+    for (int i = p * 10; i < (p + 1) * 10 && i < count; i++) {
+        m_scrollLayer->m_contentLayer->addChild(SearchHistoryNode::create(history[i], i, count, [this](SearchHistoryObject const& object) {
             m_searchCallback(object);
             onClose(nullptr);
         }, [this](int index) {
             SearchHistory::remove(index);
             page(m_page);
-        }, h12, white));
+        }, h12, white, dark));
     }
 
     m_scrollLayer->m_contentLayer->updateLayout();
     m_scrollLayer->scrollToTop();
 
-    m_countLabel->setString(fmt::format("{} to {} of {}", count > 0 ? p * 5 + 1 : 0, std::min((p + 1) * 5, (int)count), count).c_str());
+    m_countLabel->setString(fmt::format("{} to {} of {}", count > 0 ? p * 10 + 1 : 0, std::min((p + 1) * 10, (int)count), count).c_str());
 
     m_page = p;
 }
