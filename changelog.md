@@ -1,4 +1,7 @@
 # Search History Changelog
+## v1.1.1-beta.1 (2024-11-13)
+- Ported to Geometry Dash v2.207
+
 ## v1.1.0 (2024-09-08)
 - Revamped the search history popup
 - Expanded the number of search history entries per page from 5 to 10

@@ -1,6 +1,9 @@
+#include "SearchHistoryNode.hpp"
 #include "SearchHistoryPopup.hpp"
 
-SearchHistoryPopup* SearchHistoryPopup::create(SearchHistoryCallback callback) {
+using namespace geode::prelude;
+
+SearchHistoryPopup* SearchHistoryPopup::create(SearchHistoryCallback const& callback) {
     auto ret = new SearchHistoryPopup();
     if (ret->initAnchored(440.0f, 290.0f, callback, "GJ_square02.png")) {
         ret->autorelease();
@@ -10,19 +13,19 @@ SearchHistoryPopup* SearchHistoryPopup::create(SearchHistoryCallback callback) {
     return nullptr;
 }
 
-bool SearchHistoryPopup::setup(SearchHistoryCallback callback) {
+bool SearchHistoryPopup::setup(SearchHistoryCallback const& callback) {
     setTitle("Search History", "bigFont.fnt", 0.53f);
 
     m_searchCallback = callback;
 
     auto background = CCScale9Sprite::create("square02_001.png", { 0, 0, 80, 80 });
     background->setContentSize({ 400.0f, 195.0f });
-    background->setPosition(220.0f, 117.5f);
+    background->setPosition({ 220.0f, 117.5f });
     background->setOpacity(127);
     m_mainLayer->addChild(background);
 
     m_scrollLayer = ScrollLayer::create({ 400.0f, 195.0f });
-    m_scrollLayer->setPosition(20.0f, 20.0f);
+    m_scrollLayer->setPosition({ 20.0f, 20.0f });
     m_scrollLayer->m_contentLayer->setLayout(
         ColumnLayout::create()
             ->setAxisReverse(true)
@@ -35,7 +38,7 @@ bool SearchHistoryPopup::setup(SearchHistoryCallback callback) {
     m_prevButton = CCMenuItemExt::createSpriteExtraWithFrameName("GJ_arrow_01_001.png", 1.0f, [this](auto) {
         page(m_page - 1);
     });
-    m_prevButton->setPosition(-34.5f, 145.0f);
+    m_prevButton->setPosition({ -34.5f, 145.0f });
     m_buttonMenu->addChild(m_prevButton);
 
     auto nextButtonSprite = CCSprite::createWithSpriteFrameName("GJ_arrow_01_001.png");
@@ -43,7 +46,7 @@ bool SearchHistoryPopup::setup(SearchHistoryCallback callback) {
     m_nextButton = CCMenuItemExt::createSpriteExtra(nextButtonSprite, [this](auto) {
         page(m_page + 1);
     });
-    m_nextButton->setPosition(474.5f, 145.0f);
+    m_nextButton->setPosition({ 474.5f, 145.0f });
     m_buttonMenu->addChild(m_nextButton);
 
     auto clearButton = CCMenuItemExt::createSpriteExtraWithFrameName("GJ_deleteBtn_001.png", 0.6f, [this](auto) {
@@ -54,19 +57,19 @@ bool SearchHistoryPopup::setup(SearchHistoryCallback callback) {
             }
         });
     });
-    clearButton->setPosition(420.0f, 270.0f);
+    clearButton->setPosition({ 420.0f, 270.0f });
     m_buttonMenu->addChild(clearButton);
 
     m_countLabel = CCLabelBMFont::create("", "goldFont.fnt");
     m_countLabel->setAnchorPoint({ 1.0f, 0.0f });
     m_countLabel->setScale(0.5f);
-    m_countLabel->setPosition(435.0f, 7.0f);
+    m_countLabel->setPosition({ 435.0f, 7.0f });
     m_mainLayer->addChild(m_countLabel);
 
     m_searchInput = TextInput::create(400.0f, "Search History...");
     m_searchInput->setCommonFilter(CommonFilter::Any);
     m_searchInput->setTextAlign(TextInputAlign::Left);
-    m_searchInput->setPosition(220.0f, 235.0f);
+    m_searchInput->setPosition({ 220.0f, 235.0f });
     m_searchInput->setCallback([this](auto) { page(0); });
     m_mainLayer->addChild(m_searchInput);
 

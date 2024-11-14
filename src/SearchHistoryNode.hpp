@@ -1,9 +1,9 @@
 #include "SearchHistory.hpp"
 
-typedef MiniFunction<void(SearchHistoryObject const&)> SearchCallback;
-typedef MiniFunction<void(int)> RemoveCallback;
+typedef std::function<void(SearchHistoryObject const&)> SearchCallback;
+typedef std::function<void(int)> RemoveCallback;
 
-class SearchHistoryNode : public CCNode {
+class SearchHistoryNode : public cocos2d::CCNode {
 protected:
     SearchHistoryObject m_object;
     SearchCallback m_searchCallback;
@@ -11,8 +11,8 @@ protected:
     int m_index;
     int m_count;
 public:
-    static SearchHistoryNode* create(SearchHistoryObject const&, int, int, SearchCallback, RemoveCallback, bool, bool, bool);
+    static SearchHistoryNode* create(SearchHistoryObject const&, int, int, SearchCallback const&, RemoveCallback const&, bool, bool, bool);
 
-    bool init(SearchHistoryObject const&, int, int, SearchCallback, RemoveCallback, bool, bool, bool);
+    bool init(SearchHistoryObject const&, int, int, SearchCallback const&, RemoveCallback const&, bool, bool, bool);
     void draw() override;
 };

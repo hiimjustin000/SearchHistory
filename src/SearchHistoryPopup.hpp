@@ -1,20 +1,20 @@
-#include "SearchHistoryNode.hpp"
+#include "SearchHistory.hpp"
 
-typedef MiniFunction<void(SearchHistoryObject const&)> SearchHistoryCallback;
+typedef std::function<void(SearchHistoryObject const&)> SearchHistoryCallback;
 
-class SearchHistoryPopup : public geode::Popup<SearchHistoryCallback> {
+class SearchHistoryPopup : public geode::Popup<SearchHistoryCallback const&> {
 protected:
-    ScrollLayer* m_scrollLayer;
+    geode::ScrollLayer* m_scrollLayer;
     SearchHistoryCallback m_searchCallback;
-    TextInput* m_searchInput;
+    geode::TextInput* m_searchInput;
     CCMenuItemSpriteExtra* m_prevButton;
     CCMenuItemSpriteExtra* m_nextButton;
-    CCLabelBMFont* m_countLabel;
+    cocos2d::CCLabelBMFont* m_countLabel;
     int m_page;
 
-    bool setup(SearchHistoryCallback) override;
+    bool setup(SearchHistoryCallback const&) override;
 public:
-    static SearchHistoryPopup* create(SearchHistoryCallback);
+    static SearchHistoryPopup* create(SearchHistoryCallback const&);
 
     void page(int);
 };

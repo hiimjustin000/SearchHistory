@@ -1,6 +1,4 @@
-#include <Geode/Geode.hpp>
-
-using namespace geode::prelude;
+#pragma once
 
 struct SearchHistoryObject {
     int64_t time;
@@ -25,7 +23,7 @@ struct SearchHistoryObject {
     bool star;
 
     bool operator==(SearchHistoryObject const& other) const {
-        return floor(time / 86400.0) == floor(other.time / 86400.0) && 
+        return floor(time / 86400.0) == floor(other.time / 86400.0) &&
             type == other.type &&
             query == other.query &&
             difficulties == other.difficulties &&
@@ -55,49 +53,49 @@ public:
     static void remove(int);
 };
 
-#define PROPERTY_OR_DEFAULT(obj, prop, isFunc, asFunc, def) (obj.contains(prop) && obj[prop].isFunc() ? obj[prop].asFunc() : def)
-
 template<>
 struct matjson::Serialize<std::vector<SearchHistoryObject>> {
-    static std::vector<SearchHistoryObject> from_json(matjson::Value const& value) {
+    static geode::Result<std::vector<SearchHistoryObject>> fromJson(matjson::Value const& value) {
+        if (!value.isArray()) return geode::Err("Expected array");
+
         std::vector<SearchHistoryObject> vec;
 
-        for (auto const& elem : value.as_array()) {
+        for (auto const& elem : value.asArray().unwrap()) {
             std::vector<int> difficulties;
-            if (elem.contains("difficulties") && elem["difficulties"].is_array()) {
-                for (auto const& e : elem["difficulties"].as_array()) {
-                    difficulties.push_back(e.as_int());
+            if (elem.contains("difficulties") && elem["difficulties"].isArray()) {
+                for (auto const& e : elem["difficulties"].asArray().unwrap()) {
+                    difficulties.push_back(e.asInt().unwrapOr(0));
                 }
             }
 
             std::vector<int> lengths;
-            if (elem.contains("lengths") && elem["lengths"].is_array()) {
-                for (auto const& e : elem["lengths"].as_array()) {
-                    lengths.push_back(e.as_int());
+            if (elem.contains("lengths") && elem["lengths"].isArray()) {
+                for (auto const& e : elem["lengths"].asArray().unwrap()) {
+                    lengths.push_back(e.asInt().unwrapOr(0));
                 }
             }
 
             SearchHistoryObject obj = {
-                .time = (int64_t)PROPERTY_OR_DEFAULT(elem, "time", is_number, as_double, 0),
-                .type = PROPERTY_OR_DEFAULT(elem, "type", is_number, as_int, 0),
-                .query = PROPERTY_OR_DEFAULT(elem, "query", is_string, as_string, ""),
+                .time = (int64_t)elem["time"].asInt().unwrapOr(0),
+                .type = (int)elem["type"].asInt().unwrapOr(0),
+                .query = elem["query"].asString().unwrapOr(""),
                 .difficulties = difficulties,
                 .lengths = lengths,
-                .uncompleted = PROPERTY_OR_DEFAULT(elem, "uncompleted", is_bool, as_bool, false),
-                .completed = PROPERTY_OR_DEFAULT(elem, "completed", is_bool, as_bool, false),
-                .featured = PROPERTY_OR_DEFAULT(elem, "featured", is_bool, as_bool, false),
-                .original = PROPERTY_OR_DEFAULT(elem, "original", is_bool, as_bool, false),
-                .twoPlayer = PROPERTY_OR_DEFAULT(elem, "two-player", is_bool, as_bool, false),
-                .coins = PROPERTY_OR_DEFAULT(elem, "coins", is_bool, as_bool, false),
-                .epic = PROPERTY_OR_DEFAULT(elem, "epic", is_bool, as_bool, false),
-                .legendary = PROPERTY_OR_DEFAULT(elem, "legendary", is_bool, as_bool, false),
-                .mythic = PROPERTY_OR_DEFAULT(elem, "mythic", is_bool, as_bool, false),
-                .song = PROPERTY_OR_DEFAULT(elem, "song", is_bool, as_bool, false),
-                .customSong = PROPERTY_OR_DEFAULT(elem, "custom-song", is_bool, as_bool, false),
-                .songID = PROPERTY_OR_DEFAULT(elem, "song-id", is_number, as_int, 0),
-                .demonFilter = PROPERTY_OR_DEFAULT(elem, "demon-filter", is_number, as_int, 0),
-                .noStar = PROPERTY_OR_DEFAULT(elem, "no-star", is_bool, as_bool, false),
-                .star = PROPERTY_OR_DEFAULT(elem, "star", is_bool, as_bool, false)
+                .uncompleted = elem["uncompleted"].asBool().unwrapOr(false),
+                .completed = elem["completed"].asBool().unwrapOr(false),
+                .featured = elem["featured"].asBool().unwrapOr(false),
+                .original = elem["original"].asBool().unwrapOr(false),
+                .twoPlayer = elem["two-player"].asBool().unwrapOr(false),
+                .coins = elem["coins"].asBool().unwrapOr(false),
+                .epic = elem["epic"].asBool().unwrapOr(false),
+                .legendary = elem["legendary"].asBool().unwrapOr(false),
+                .mythic = elem["mythic"].asBool().unwrapOr(false),
+                .song = elem["song"].asBool().unwrapOr(false),
+                .customSong = elem["custom-song"].asBool().unwrapOr(false),
+                .songID = (int)elem["song-id"].asInt().unwrapOr(0),
+                .demonFilter = (int)elem["demon-filter"].asInt().unwrapOr(0),
+                .noStar = elem["no-star"].asBool().unwrapOr(false),
+                .star = elem["star"].asBool().unwrapOr(false)
             };
 
             if (!std::any_of(vec.begin(), vec.end(), [&obj](SearchHistoryObject const& o) {
@@ -105,24 +103,24 @@ struct matjson::Serialize<std::vector<SearchHistoryObject>> {
             })) vec.push_back(obj);
         }
 
-        return vec;
+        return geode::Ok(vec);
     }
 
-    static matjson::Value to_json(std::vector<SearchHistoryObject> const& vec) {
-        matjson::Array arr;
+    static matjson::Value toJson(std::vector<SearchHistoryObject> const& vec) {
+        std::vector<matjson::Value> arr;
 
         for (auto const& obj : vec) {
-            matjson::Array difficulties;
+            std::vector<matjson::Value> difficulties;
             for (int const& e : obj.difficulties) {
                 difficulties.push_back(e);
             }
 
-            matjson::Array lengths;
+            std::vector<matjson::Value> lengths;
             for (int const& e : obj.lengths) {
                 lengths.push_back(e);
             }
 
-            matjson::Object historyObject;
+            matjson::Value historyObject;
             historyObject["time"] = obj.time;
             historyObject["type"] = obj.type;
             if (!obj.query.empty()) historyObject["query"] = obj.query;
@@ -150,9 +148,5 @@ struct matjson::Serialize<std::vector<SearchHistoryObject>> {
         }
 
         return arr;
-    }
-
-    static bool is_json(matjson::Value const& value) {
-        return value.is_array();
     }
 };

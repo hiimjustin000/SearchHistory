@@ -1,5 +1,7 @@
 #include "SearchHistory.hpp"
 
+using namespace geode::prelude;
+
 void SearchHistory::add(GJSearchObject* search, time_t time, int type) {
     auto history = Mod::get()->getSavedValue<std::vector<SearchHistoryObject>>("search-history");
 
